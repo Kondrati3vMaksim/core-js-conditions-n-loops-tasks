@@ -121,12 +121,12 @@ function convertToRomanNumerals(num) {
     result += 'X';
     remainder -= 10;
   }
-  if (remainder === 9) return result + 'IX';
+  if (remainder === 9) return `${result}IX`;
   if (remainder >= 5) {
     result += 'V';
     remainder -= 5;
   }
-  if (remainder === 4) return result + 'IV';
+  if (remainder === 4) return `${result}IV`;
   while (remainder > 0) {
     result += 'I';
     remainder -= 1;
@@ -151,8 +151,16 @@ function convertToRomanNumerals(num) {
  */
 function convertNumberToString(numberStr) {
   const words = [
-    'zero', 'one', 'two', 'three', 'four',
-    'five', 'six', 'seven', 'eight', 'nine',
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
   ];
   let result = '';
   for (let index = 0; index < numberStr.length; index += 1) {
@@ -337,23 +345,24 @@ function getSpiralMatrix(size) {
  *  ]                 ]
  */
 function rotateMatrix(matrix) {
+  const result = matrix;
   const size = matrix.length;
   for (let row = 0; row < size; row += 1) {
     for (let col = row + 1; col < size; col += 1) {
-      const temp = matrix[row][col];
-      matrix[row][col] = matrix[col][row];
-      matrix[col][row] = temp;
+      const temp = result[row][col];
+      result[row][col] = result[col][row];
+      result[col][row] = temp;
     }
   }
   for (let row = 0; row < size; row += 1) {
     for (let col = 0; col < Math.floor(size / 2); col += 1) {
       const other = size - col - 1;
-      const temp = matrix[row][col];
-      matrix[row][col] = matrix[row][other];
-      matrix[row][other] = temp;
+      const temp = result[row][col];
+      result[row][col] = result[row][other];
+      result[row][other] = temp;
     }
   }
-  return matrix;
+  return result;
 }
 
 /**
@@ -371,17 +380,18 @@ function rotateMatrix(matrix) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
+  const result = arr;
   const siftDown = (start, end) => {
     let root = start;
     while (root * 2 + 1 <= end) {
       let child = root * 2 + 1;
-      if (child + 1 <= end && arr[child] < arr[child + 1]) {
+      if (child + 1 <= end && result[child] < result[child + 1]) {
         child += 1;
       }
-      if (arr[root] >= arr[child]) return;
-      const temp = arr[root];
-      arr[root] = arr[child];
-      arr[child] = temp;
+      if (result[root] >= result[child]) return;
+      const temp = result[root];
+      result[root] = result[child];
+      result[child] = temp;
       root = child;
     }
   };
@@ -389,12 +399,12 @@ function sortByAsc(arr) {
     siftDown(start, arr.length - 1);
   }
   for (let end = arr.length - 1; end > 0; end -= 1) {
-    const temp = arr[0];
-    arr[0] = arr[end];
-    arr[end] = temp;
+    const temp = result[0];
+    result[0] = result[end];
+    result[end] = temp;
     siftDown(0, end - 1);
   }
-  return arr;
+  return result;
 }
 
 /**
@@ -415,7 +425,7 @@ function sortByAsc(arr) {
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
 function shuffleChar(str, iterations) {
-  const length = str.length;
+  const { length } = str;
   if (length < 2 || iterations === 0) return str;
   const evenCount = Math.ceil(length / 2);
   const visited = new Uint8Array(length);
@@ -429,9 +439,11 @@ function shuffleChar(str, iterations) {
         visited[current] = 1;
         cycle[count] = current;
         count += 1;
-        current = current % 2 === 0
-          ? current / 2
-          : evenCount + (current - 1) / 2;
+        if (current % 2 === 0) {
+          current /= 2;
+        } else {
+          current = evenCount + (current - 1) / 2;
+        }
       }
       const shift = iterations % count;
       for (let index = 0; index < count; index += 1) {
