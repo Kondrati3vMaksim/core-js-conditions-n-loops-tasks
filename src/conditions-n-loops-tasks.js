@@ -150,26 +150,26 @@ function convertToRomanNumerals(num) {
  *  '1950.2'  => 'one nine five zero point two'
  */
 function convertNumberToString(numberStr) {
-  const words = [
-    'zero',
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-  ];
   let result = '';
   for (let index = 0; index < numberStr.length; index += 1) {
-    const char = numberStr[index];
     let word;
-    if (char === '-') word = 'minus';
-    else if (char === '.' || char === ',') word = 'point';
-    else word = words[+char];
-    result += (index === 0 ? '' : ' ') + word;
+    switch (numberStr[index]) {
+      case '-': word = 'minus'; break;
+      case '.':
+      case ',': word = 'point'; break;
+      case '0': word = 'zero'; break;
+      case '1': word = 'one'; break;
+      case '2': word = 'two'; break;
+      case '3': word = 'three'; break;
+      case '4': word = 'four'; break;
+      case '5': word = 'five'; break;
+      case '6': word = 'six'; break;
+      case '7': word = 'seven'; break;
+      case '8': word = 'eight'; break;
+      case '9': word = 'nine'; break;
+      default: word = ''; break;
+    }
+    result += `${index === 0 ? '' : ' '}${word}`;
   }
   return result;
 }
